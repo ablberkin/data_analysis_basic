@@ -1,0 +1,115 @@
+<head>
+    <!-- style sheet of Vssue -->
+    <link rel="stylesheet" href="https://unpkg.com/vssue/dist/vssue.min.css">
+  </head>
+  
+  <style>
+    /* 标题 */
+.header {
+    padding: 80px;
+    text-align: center;
+    background: #1abc9c;
+    color: white;
+}
+
+/* 标题字体加大 */
+.header h1 {
+    font-size: 40px;
+}
+
+/* 导航 */
+.navbar {
+    overflow: hidden;
+    background-color: #333;
+}
+
+/* 导航栏样式 */
+.navbar a {
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 20px;
+    text-decoration: none;
+}
+  </style>
+  <body>
+    <div class="header">
+      <h1>数据分析案例教程</h1>
+      <p>————以京东电脑数据分析与推荐为例</p>
+    </div>
+    
+    <div class="navbar">
+      <a href="首页说明.html">说明</a>
+      <a href="爬虫讲解.html">数据爬取</a>
+      <a href="数据处理与分析.html">数据处理与分析</a>
+      <a href="数据建模.html">数据建模</a>
+      <a href="index.html">评论区</a>
+    </div>
+
+    <div id="vssue"></div>
+  
+    <!-- Introduce Vue first -->
+  
+    <!-- vue runtime build (runtime only)  -->
+    <script src="https://unpkg.com/vue/dist/vue.runtime.min.js"></script>
+    <!-- OR: vue full build (runtime + compiler)  -->
+    <script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+  
+    <!-- Introduce Vssue after Vue -->
+  
+    <!-- Vssue Github build -->
+    <script src="https://unpkg.com/vssue/dist/vssue.github.min.js"></script>
+    <!-- OR: Vssue Gitlab build -->
+    <script src="https://unpkg.com/vssue/dist/vssue.gitlab.min.js"></script>
+    <!-- OR: Vssue Bitbucket build -->
+    <script src="https://unpkg.com/vssue/dist/vssue.bitbucket.min.js"></script>
+    <!-- OR: Vssue Gitee build -->
+    <script src="https://unpkg.com/vssue/dist/vssue.gitee.min.js"></script>
+    <!-- OR: Vssue Gitea build -->
+    <script src="https://unpkg.com/vssue/dist/vssue.gitea.min.js"></script>
+  
+    <!-- Use Vssue as a Vue component -->
+  
+    <!-- use render function for vue runtime build -->
+    <script>
+      new Vue({
+        el: '#vssue',
+  
+        render: h => h('Vssue', {
+          props: {
+            // here set the title of issue of current page
+            title: 'Vssue Dev',
+  
+            // here set the options for your OAuth App
+            options: {
+              owner: 'ablberkin',
+              repo: 'Reviews-system',
+              clientId: '79e410c1f3b30283fdf2',
+              clientSecret: '90c53813ac77d918796d523e9e068895a3637e6a', // only required for some of the platforms
+            },
+          }
+        })
+      })
+    </script>
+  
+    <!-- OR: use template for vue full build -->
+    <!-- <script>
+      new Vue({
+        el: '#vssue',
+  
+        data: {
+          title: 'Vssue Dev',
+  
+          options: {
+            owner: 'ablberkin',
+            repo: 'Reviews-system',
+            clientId: '79e410c1f3b30283fdf2',
+            clientSecret: '90c53813ac77d918796d523e9e068895a3637e6a', // only required for some of the platforms
+          },
+        },
+  
+        template: `<vssue :title="title" :options="options"></vssue>`,
+      })
+    </script> -->
+  </body>

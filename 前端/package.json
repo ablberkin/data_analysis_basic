@@ -1,0 +1,29 @@
+{
+
+  "type": "node",
+
+ "request": "launch",
+
+  "name": "Launch via NPM",
+
+  "runtimeExecutable": "npm",
+
+  "cwd": "${workspaceRoot}/bwschool/1505E/vue/my_test_vue",
+
+  "windows": {
+
+      "runtimeExecutable": "npm.cmd"
+
+  },
+
+  "runtimeArgs": [
+
+      "start"
+
+  ],
+
+  "protocol": "inspector",
+
+  "port": 9229
+
+}

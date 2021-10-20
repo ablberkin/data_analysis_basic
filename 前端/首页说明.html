@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>数据分析案例首页说明</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* {
+    box-sizing: border-box;
+}
+
+/* body 样式 */
+body {
+    font-family: Arial;
+    margin: 0;
+}
+
+/* 标题 */
+.header {
+    padding: 80px;
+    text-align: center;
+    background: #1abc9c;
+    color: white;
+}
+
+/* 标题字体加大 */
+.header h1 {
+    font-size: 40px;
+}
+
+/* 导航 */
+.navbar {
+    overflow: hidden;
+    background-color: #333;
+}
+
+/* 导航栏样式 */
+.navbar a {
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 20px;
+    text-decoration: none;
+}
+
+/* 右侧链接*/
+.navbar a.right {
+    float: right;
+}
+
+/* 鼠标移动到链接的颜色 */
+.navbar a:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+/* 列容器 */
+.row {  
+    display: -ms-flexbox; /* IE10 */
+    display: flex;
+    -ms-flex-wrap: wrap; /* IE10 */
+    flex-wrap: wrap;
+}
+
+/* 创建两个列 */
+/* 边栏 */
+.side {
+    -ms-flex: 30%; /* IE10 */
+    flex: 30%;
+    background-color: #f1f1f1;
+    padding: 20px;
+}
+
+/* 主要的内容区域 */
+.main {   
+    -ms-flex: 70%; /* IE10 */
+    flex: 70%;
+    background-color: white;
+    padding: 20px;
+}
+
+/* 测试图片 */
+.fakeimg {
+    background-color: #aaa;
+    width: 100%;
+    padding: 5px;
+}
+
+/* 底部 */
+.footer {
+    padding: 20px;
+    text-align: center;
+    background: #ddd;
+    font-size:75%
+}
+
+/* 响应式布局 - 在屏幕设备宽度尺寸小于 700px 时, 让两栏上下堆叠显示 */
+@media screen and (max-width: 700px) {
+    .row {   
+        flex-direction: column;
+    }
+}
+
+/* 响应式布局 - 在屏幕设备宽度尺寸小于 400px 时, 让导航栏目上下堆叠显示 */
+@media screen and (max-width: 400px) {
+    .navbar a {
+        float: none;
+        width: 100%;
+    }
+}
+/* 创建主页图片长廊 */
+.mainimg {
+    margin: 5px;
+    border: 1px solid #ccc;
+    float: left;
+    width: 100px;
+}
+
+
+.mainimg img{
+    width: 100%;
+    height: auto;
+}
+
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>数据分析案例教程</h1>
+  <p>————以京东电脑数据分析与推荐为例</p>
+</div>
+
+<div class="navbar">
+    <a href="首页说明.html">说明</a>
+    <a href="爬虫讲解.html">数据爬取</a>
+    <a href="数据处理与分析.html">数据处理与分析</a>
+    <a href="数据建模.html">数据建模</a>
+    <a href="index.html">评论区</a>
+
+
+</div>
+
+<div class="row">
+  <div class="side">
+    <h2>关于作者</h2>
+    <h5>金新伟:</h5>
+    <div class="fakeimg" ><img src="img/w1/5.jpeg" alt="假装有照片" class="fakeimg"></div>
+    <p>联系方式：369565049(QQ)</p>
+      <p></p>
+    <h2>参考/引用</h2>
+      <ul>
+          <li>菜鸟教程（前端相关）</li>
+          <img src="img/w1/6.webp" width="50%" alt="">
+          <li>Vssue框架</li>
+          <img src="img/w1/7.png" alt="" width="80%">
+      </ul>
+  </div>
+  <div class="main">
+      <h2>本教程的目的</h2>
+      <p>现如今随着互联网的逐渐普及，各行各业都产生了众多的数据。这些数据大大便利了我们展开分析研究。但是巨大的数据量
+          也对我们的数据分析能力提出了一定的要求。市面上现如今有众多的数据爬虫和数据分析教程，但是有些教程过于厚重，
+          有些教程则不够完整，从而使得初学者一时难以确定自己的学习方向。</p>
+      <p>本教程将会讲解一个在京东上分析笔记本电脑选购的完整案例，这个案例将包括爬取数据、处理数据并且分析数据的完整过程。
+          旨在让初入数据分析的初学者能够通过实际案例的讲解，来对数据分析有一个直观、具象的了解，从而顺利地进入数据分析的大门。</p>
+      <p>我们将使用Gitee作为代码托管的平台，欢迎大家去下载源代码并且提交对源代码的改进或是新的数据分析案例与思路。也欢迎大家在评论区进行交流互动</p>
+          <!-- 现如今笔记本电脑的种类复杂，而如何选购一款合适的笔记本会成为电脑小白的一个困惑。 -->
+      <br>
+      <h2>准备工作</h2>
+      <h5>电脑环境</h5>
+      <!-- <div class="fakeimg" style="height:200px;">python 3.6</div> -->
+      <ul>
+          <li>Python 3.6 版本及以上</li>
+          <li>Excel</li>
+          <li>Matlab</li>
+      </ul>
+      <p>可选</p>
+      <ul>
+          <li>PowerBi</li>
+      </ul>
+      <div class="mainimg">
+            <img src="img/w1/1.jpeg" alt="" width="300" height="200">
+      </div>
+      <div class="mainimg">
+        <img src="img/w1/2.jpeg" alt="" width="300" height="200">
+      </div>
+      <div class="mainimg">
+        <img src="img/w1/4.jpeg" alt="" width="300" height="200">
+      </div>
+      <div class="mainimg">
+        <img src="img/w1/8.webp" alt="" width="600" height="400">
+      </div>
+      <br><br><br><br><br><h5>预备知识</h5>
+      <ul>
+          <li>Python基础语法</li>
+          <li>Excel基础用法</li>
+          <li>Matlab基础语法</li>
+          <li>Github的使用</li>
+      </ul>
+      <h3>网站不足</h3>
+      <ul>
+          <li>评论区的后端框架加载较慢，需要耐心等待</li>
+      </ul>
+  </div>
+</div>
+
+<div class="footer">
+  <p>作者：陆炜，金新伟</p>
+</div>
+
+</body>
+</html>

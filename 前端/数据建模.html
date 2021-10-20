@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>数据分析案例建模部分</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    $("#show_button1").click(function(){
+        $("#show1").toggle();
+    });
+});
+
+
+</script>
+<style>
+* {
+    box-sizing: border-box;
+}
+
+/* body 样式 */
+body {
+    font-family: Arial;
+    margin: 0;
+}
+
+/* 标题 */
+.header {
+    padding: 80px;
+    text-align: center;
+    background: #1abc9c;
+    color: white;
+}
+
+/* 标题字体加大 */
+.header h1 {
+    font-size: 40px;
+}
+
+/* 导航 */
+.navbar {
+    overflow: hidden;
+    background-color: #333;
+}
+
+/* 导航栏样式 */
+.navbar a {
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 20px;
+    text-decoration: none;
+}
+
+/* 右侧链接*/
+.navbar a.right {
+    float: right;
+}
+
+/* 鼠标移动到链接的颜色 */
+.navbar a:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+/* 列容器 */
+.row {  
+    display: -ms-flexbox; /* IE10 */
+    display: flex;
+    -ms-flex-wrap: wrap; /* IE10 */
+    flex-wrap: wrap;
+}
+
+/* 创建两个列 */
+/* 边栏 */
+.side {
+    -ms-flex: 30%; /* IE10 */
+    flex: 30%;
+    background-color: #f1f1f1;
+    padding: 20px;
+}
+
+
+
+/* 源代码区域布局 */
+.scode{
+    /* background-color: rgb(217, 231, 84);
+    width: 100%;
+    padding: 20px;
+    color: blue; */
+    overflow: auto;
+	border:2px solid #cce0d2;
+	padding:10px 40px; 
+	background-color:#6fbb68;
+	width: 800px;
+	border-radius:25px;
+    box-shadow: 10px 10px 5px #888888;
+}
+
+/* 主要的内容区域 */
+.main {   
+    -ms-flex: 70%; /* IE10 */
+    flex: 70%;
+    background-color: white;
+    padding: 20px;
+}
+
+/* 测试图片 */
+.fakeimg {
+    background-color: #aaa;
+    width: 100%;
+    padding: 20px;
+}
+
+/* 评论区布局 */
+.comment_area{
+    padding: 40px;
+    flex: 70%
+}
+.comment{
+    width: 1150px;
+    height: 300px;
+    overflow:scroll;
+    word-wrap: normal;
+}
+
+/* 底部 */
+.footer {
+    padding: 20px;
+    text-align: center;
+    background: #ddd;
+}
+
+/* 响应式布局 - 在屏幕设备宽度尺寸小于 700px 时, 让两栏上下堆叠显示 */
+@media screen and (max-width: 700px) {
+    .row {   
+        flex-direction: column;
+    }
+}
+
+/* 响应式布局 - 在屏幕设备宽度尺寸小于 400px 时, 让导航栏目上下堆叠显示 */
+@media screen and (max-width: 400px) {
+    .navbar a {
+        float: none;
+        width: 100%;
+    }
+
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>数据分析案例教程</h1>
+  <p>————以京东电脑数据分析与推荐为例</p>
+</div>
+
+<div class="navbar">
+    <a href="首页说明.html">说明</a>
+    <a href="爬虫讲解.html">数据爬取</a>
+    <a href="数据处理与分析.html">数据处理与分析</a>
+    <a href="数据建模.html">数据建模</a>
+    <a href="index.html">评论区</a>
+
+
+  <!-- <a href="#" class="right">链接</a> -->
+</div>
+
+<div class="row">
+  <div class="side">
+      <h2>关于作者</h2>
+      <h5>陆炜</h5>
+      <img src="img/w4/2.webp" alt="" width="50%">
+      <h3>相关书籍推荐</h3>
+      <p>数学建模算法与应用 司守奎</p>
+      <img src="img/w4/1.webp" alt="" width="50%">
+      <p>数学建模 姜启源</p>
+      <img src="img/w4/3.jpg" alt="" width="50%">
+
+  </div>
+  <div class="main">
+      <h2>引言</h2>
+      <p>
+        数学建模，就是根据实际问题来建立数学模型，对数学模型来进行求解，然后根据结果去解决实际问题。
+        当需要从定量的角度分析和研究一个实际问题时，人们就要在深入调查研究、了解对象信息、作出简化假设、
+        分析内在规律等工作的基础上，用数学的符号和语言作表述来建立数学模型。
+      </p>
+      <p>
+          在数学建模领域，尤其是传统的建模算法，Matlab有着极为丰富的代码资源和工具库，其矩阵运算的特点使得其运算速度得到大大提升
+          并且更加符合我们的数学语言。一个比较大的问题是其是闭源的，收费较贵。当然，现在也有许多开源的语言能够实现建模，但Matlab仍然是一种比较简单而稳定的工具。
+      </p>
+      <h2>数据清洗和处理</h2>
+      <p>数据清洗和处理的质量会直接影响到模型的质量好坏，假如混入了大量无效数据和错误的数据转化会使得模型与预想有着较大出入。</p>
+      <p>在这里我们主要使用Excel来处理数据，因为无需编程比较快捷。</p>
+      <ol>
+          <li>缺失值处理：缺失的裸机重量取中位数</li>
+          <li>数据转换：
+              <ul>
+                  <li>查阅资料后对屏幕质量、内存等配置进行打分</li>
+                  <li>价格转化为合理区间，否则权重过大</li>
+              </ul> </li>
+      </ol>
+      <h2>数据建模</h2>
+      <h3>模型选择</h3>
+      <p>
+          模型的合理与否决定了我们的模型和数据是否适配。在这里我们选择Topsis模型，其能充分你利用原始数据的信息，其结果能够精确地反映各评价方案之间的差距。
+      </p>
+      <p>
+        该模型的基本过程是：先将原始数据矩阵统一指标类型（一般正向化处理，即指标的值越大，代表对象本身越好），得到正向化矩阵，在对正向化矩阵进行标准化处理以消除
+        个指标量纲的影响，并找到有限方案中的最优方案和最劣方案，然后分别计算个评价对象与最优方案和最劣方案间的距离，获得各评价对象与最优方案的相对接近程度，
+        以此作为评价优劣的依据。该方法对数据的分布及样本的含量没有严格的限制，数据计算也较为简单。
+      </p>
+      <h3>建模步骤</h3>
+      <ol>
+          <li>将数据正向化（把所有数据变成“越大越好”的类型）</li>
+          <li>将数据标准化（把所有数据放到一个尺度下）
+            如：内存赋值了256和512，难以和色域0.6和1比较
+          </li>
+          <li>计算与最大值的距离和最小值的距离，算出得分（归一化）        </li>
+      </ol>
+      <h3>建模代码</h3>
+      <pre class="scode" id="show1" >
+        clear;clc
+        load X.mat
+        %% 
+        [n,m] = size(X);
+        disp(['共有' num2str(n) '个评价对象, ' num2str(m) '个评价指标']) 
+        Judge = input(['这' num2str(m) '个指标是否需要经过正向化处理，需要请输入1 ，不需要输入0：  ']);
+        
+        if Judge == 1
+            Position = input('请输入需要正向化处理的指标所在的列，例如第2、3、6三列需要处理，那么你需要输入[2,3,6]： '); %[2,3,4]
+            disp('请输入需要处理的这些列的指标类型（1：极小型， 2：中间型， 3：区间型） ')
+            Type = input('例如：第2列是极小型，第3列是区间型，第6列是中间型，就输入[1,3,2]：  '); %[2,1,3]
+            % 注意，Position和Type是两个同维度的行向量
+            for i = 1 : size(Position,2)  %这里需要对这些列分别处理，因此我们需要知道一共要处理的次数，即循环的次数
+                X(:,Position(i)) = Positivization(X(:,Position(i)),Type(i),Position(i));
+            % Positivization是我们自己定义的函数，其作用是进行正向化，其一共接收三个参数
+            % 第一个参数是要正向化处理的那一列向量 X(:,Position(i))   回顾上一讲的知识，X(:,n)表示取第n列的全部元素
+            % 第二个参数是对应的这一列的指标类型（1：极小型， 2：中间型， 3：区间型）
+            % 第三个参数是告诉函数我们正在处理的是原始矩阵中的哪一列
+            % 该函数有一个返回值，它返回正向化之后的指标，我们可以将其直接赋值给我们原始要处理的那一列向量
+            end
+            disp('正向化后的矩阵 X =  ')
+            disp(X)
+        end
+        
+        %% 第三步：对正向化后的矩阵进行标准化
+        Z = X ./ repmat(sum(X.*X) .^ 0.5, n, 1);
+        disp('标准化矩阵 Z = ')
+        disp(Z)
+        
+        %% 第四步：计算与最大值的距离和最小值的距离，并算出得分
+        D_P = sum([(Z - repmat(max(Z),n,1)) .^ 2 ],2) .^ 0.5;   % D+ 与最大值的距离向量
+        D_N = sum([(Z - repmat(min(Z),n,1)) .^ 2 ],2) .^ 0.5;   % D- 与最小值的距离向量
+        S = D_N ./ (D_P+D_N);    % 未归一化的得分
+        disp('最后的得分为：')
+        stand_S = S / sum(S)
+        [sorted_S,index] = sort(stand_S ,'descend')
+        %% 
+        function [posit_x] = Positivization(x,type,i)
+        % 输入变量有三个：
+        % x：需要正向化处理的指标对应的原始列向量
+        % type： 指标的类型（1：极小型， 2：中间型， 3：区间型）
+        % i: 正在处理的是原始矩阵中的哪一列
+        % 输出变量posit_x表示：正向化后的列向量
+            if type == 1  %极小型
+                disp(['第' num2str(i) '列是极小型，正在正向化'] )
+                posit_x = Min2Max(x);  %调用Min2Max函数来正向化
+                disp(['第' num2str(i) '列极小型正向化处理完成'] )
+                disp('~~~~~~~~~~~~~~~~~~~~分界线~~~~~~~~~~~~~~~~~~~~')
+            elseif type == 2  %中间型
+                disp(['第' num2str(i) '列是中间型'] )
+                best = input('请输入最佳的那一个值： ');
+                posit_x = Mid2Max(x,best);
+                disp(['第' num2str(i) '列中间型正向化处理完成'] )
+                disp('~~~~~~~~~~~~~~~~~~~~分界线~~~~~~~~~~~~~~~~~~~~')
+            elseif type == 3  %区间型
+                disp(['第' num2str(i) '列是区间型'] )
+                a = input('请输入区间的下界： ');
+                b = input('请输入区间的上界： '); 
+                posit_x = Inter2Max(x,a,b);
+                disp(['第' num2str(i) '列区间型正向化处理完成'] )
+                disp('~~~~~~~~~~~~~~~~~~~~分界线~~~~~~~~~~~~~~~~~~~~')
+            else
+                disp('没有这种类型的指标，请检查Type向量中是否有除了1、2、3之外的其他值')
+            end
+        end
+        %% 
+        function [posit_x] = Min2Max(x)
+            posit_x = max(x) - x;
+            % posit_x = 1 / x; 如果x全部都大于0，也可以这样正向化
+        end
+        
+        
+      </pre>
+      <br>
+  </div>
+  <!-- <div class="comment_area">
+    <form name="input" action="html_form_action.php" method="get" id="f_comment">
+        <div><h3>评论:</h3> <input type="submit" value="提交" style="float: right;" id="btn"></div>
+    </form>    
+    <br>
+    <textarea type="text" name="user" placeholder="请发表你的想法" class="comment" form="f_comment"></textarea>
+  </div>
+  <span>昵称：</span><input type="text" id="user" name="user"> -->
+  <div class="div1" id="div1">
+    <!-- 创建昵称和留言文本框 -->
+    <span>昵称：</span><input type="text" id="user" name="user">
+    <br>
+    <span>评论：</span>
+    <br>
+    <textarea class="comment" id="lang" placeholder="请发表你的想法"></textarea><br>
+    <!-- <textarea type="text" name="user" placeholder="请发表你的想法" class="comment" form="f_comment"></textarea> -->
+    <!-- 创建提交评价按钮 -->
+    <input type="button" value="提交评价" id="btn">
+</div>
+</div>
+</body>
+<script type="text/javascript">
+    //通过id属性查找标签节点
+    var user=document.getElementById('user');
+    var lang=document.getElementById('lang');
+    //通过id属性查找提交评价按钮并绑定点击事件
+    document.getElementById('btn').onclick=function(){
+        //在html代码中创建一个div盒子
+        var cont=document.createElement('div');
+        //将获取到的数据，放到一创建好的盒子中
+        cont.innerHTML='<p>'+user.value+':'+lang.value+'</p><hr>';
+        //将创建好的div盒子及及内容显示在页面中
+        document.getElementById('div1').appendChild(cont);
+        user.value='';
+        lang.value='';
+    }
+</script>
+</html>

@@ -1,0 +1,192 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<link href='css/bootstrap.min.css' rel='stylesheet'>
+	<script src='js/jquery-2.1.4.min.js'></script>
+	<script src='js/bootstrap.min.js'></script>
+	<script>
+var re_com_id=1;
+function comment(){
+	var content=$("#com_content").val();
+	$.ajax({
+        type: "GET",
+        url:"http://localhost:8080/big/gogo?type=comment&car_id=<%=request.getParameter("id")%>&name=<%=request.getParameter("name")%>",//请求课附加值
+        data:{  
+            content:content
+        },
+        success :function(json){
+        	var item="<div style='display:inline;' id='"+json.com_id+"'><div style='font-size:50px;display:inline;'><%=request.getParameter("name")%>:</div><div style='margin-left:30px;wdith:500px; font-size:20px;display:inline;'>"+content+"</div> <a class='dropdown-toggle' data-toggle='dropdown'>回复</a><ul class='dropdown-menu'><form><textarea name='content' style='width:800px;margin-left:100px;' id='re_com_"+re_com_id+"'></textarea><input style='margin-left:20px;' type='button' value='回复' οnclick='recom('<%=request.getParameter("name")%>',"+json.com_id+","+re_com_id+")'></form></ul></div><hr>"
+        	$("#comment_area").append(item);
+        	alert("留言成功！");
+        	$("#com_content").html(" ");
+        }
+	});
+}
+function recom(name,com_id,re_com_id){
+	var content=$("#re_com_"+re_com_id).val();
+	var item="<div style='margin-left:40px;'><div style='font-size:30px;display:inline;'><%=request.getParameter("name")%>回复"+name+":</div><div style='margin-left:30px;wdith:500px; font-size:20px;display:inline;'>"+content+"</div> <a class='dropdown-toggle' data-toggle='dropdown'>回复</a><ul class='dropdown-menu'><form><textarea name='content' style='width:800px;margin-left:100px;' id='re_com_"+re_com_id+"'></textarea><input class='btn btn-primary' style='margin-left:20px;' type='button' value='回复' οnclick='recom('<%=request.getParameter("name")%>'"+","+com_id+","+re_com_id+")'></form></ul></div>";
+	$("#"+com_id).append(item);
+	$.ajax({
+        type: "GET",
+        url:"http://localhost:8080/big/gogo?type=re_comment&car_id=<%=request.getParameter("id")%>&name1=<%=request.getParameter("name")%>&name2="+name+"&com_id="+com_id,
+        data:{  
+            content:content
+        }
+	});
+}
+
+function init(){
+	var f;
+	$.ajax({
+		type: "GET",
+        url:"http://localhost:8080/big/gogo?type=get_close&car_id=<%=request.getParameter("id")%>",
+        success:function(json){
+        	f=json.flag;
+        	if(json.flag==0){
+        		var item="<div style='margin-left:120px;' ><h3>留言区</h3><form action='gogo'><textarea name='hobby' style='width:800px;margin-left:100px;' id='com_content'></textarea><input class='btn btn-primary' style='margin-left:20px;' type='button' value='留言' οnclick='comment()'></form><div id='comment_area' class='dropdown'></div></div>";
+        		$("body").append(item);
+        	}
+        	else{
+        		var item="<div style='margin-left:120px;' ><h3>留言区</h3><div id='comment_area' class='dropdown'></div></div>";
+        		$("body").append(item);
+        	}
+        }
+	});
+	$.ajax({
+        type: "GET",
+        url:"http://localhost:8080/big/gogo?type=get_comment&car_id=<%=request.getParameter("id")%>",
+        success:function(json){
+        	var i=0;
+        	var j=0;
+        	var area=$("#comment_area");
+        	var n=0;
+        	var cc=-1;
+        	var sub_area;
+        	var item;
+        	var s;
+        	var a;
+        	var content=0;
+        	while(json[i]){
+        		cc=1;
+        		for(j in json[i]){
+        			if(cc<3){
+        				cc++;
+        			}
+        			else if(cc==3){
+        				if(f==0){
+        					item="<div style='display:inline;' id='"+json[i].com_id+"' name='"+json[i].name+"'><div style='font-size:50px;display:inline;'>"+json[i].name+":</div><div style='margin-left:30px; font-size:20px;display:inline;wdith:500px;'>"+json[i].content+"</div> <a class='dropdown-toggle' data-toggle='dropdown'>回复</a><ul class='dropdown-menu'><form><textarea name='content' style='width:800px;margin-left:100px;' id='re_com_"+re_com_id+"'></textarea><input class='btn btn-primary' style='margin-left:20px;' type='button' value='回复' οnclick='recom(\""+json[i].name+"\","+json[i].com_id+","+re_com_id+")'></form></ul></div><hr>";
+                    		re_com_id++;
+            				area.append(item);
+                    		sub_area=$("#"+json[i].com_id);
+                    		cc++;
+        				}
+        				else{
+        					item="<div style='display:inline;' id='"+json[i].com_id+"' name='"+json[i].name+"'><div style='font-size:50px;display:inline;'>"+json[i].name+":</div><div style='margin-left:30px; font-size:20px;display:inline;wdith:500px;'>"+json[i].content+"</div></div><hr>";
+                    		re_com_id++;
+            				area.append(item);
+                    		sub_area=$("#"+json[i].com_id);
+                    		cc++;
+        				}
+        				
+        			}
+        			else if(cc==4){
+        				s=json[i][j];
+        				cc++;
+        			}
+        			else if(cc==5){
+        				a=json[i][j];
+        				cc++;
+        			}
+        			else if(cc==6){
+        				content=json[i][j];
+        				if(f==0){
+        					var tem="<div style='margin-left:40px;'><div style='font-size:30px;display:inline;'>"+s+"回复"+a+":</div><div style='margin-left:30px;wdith:500px; font-size:20px;display:inline;'>"+content+"</div> <a class='dropdown-toggle' data-toggle='dropdown'>回复</a><ul class='dropdown-menu'><form><textarea name='content' style='width:800px;margin-left:100px;' id='re_com_"+re_com_id+"'></textarea><input style='margin-left:20px;' type='button' value='回复' οnclick='recom(\""+s+"\","+json[i].com_id+","+re_com_id+")'></form></ul></div>";
+            				sub_area.append(tem);
+            				re_com_id++;
+            				cc=4;
+        				}
+        				else {
+        					var tem="<div style='margin-left:40px;'><div style='font-size:30px;display:inline;'>"+s+"回复"+a+":</div><div style='margin-left:30px;wdith:500px; font-size:20px;display:inline;'>"+content+"</div></div>";
+            				sub_area.append(tem);
+            				re_com_id++;
+            				cc=4;
+        				}
+        				
+        			}
+        			
+        			
+        		}
+        		i++;
+        	}
+        }
+	});
+}
+function get_info(){
+	$.ajax({
+        type: "GET",
+        url:"http://localhost:8080/big/gogo?type=market&id=<%=request.getParameter("id")%>",
+        success: function(json){
+        	$("#car_name").text(json["car_name"]);
+        	$("#price").text(json["price"]);
+        	$("#city").text(json["city"]);
+        	$("#distance").text(json["distance"]);
+        	$("#out_put").text(json["out_put"]);
+        	$("#degree").text(json["degree"]);
+        	$("#owner").text(json["name"]);
+        }
+        
+	});
+}
+</script> 
+</head>
+<body>
+	<center>
+		<h2>汽车详情</h2>
+		<img src='./images/<%=request.getParameter("id")%>.png'></center>
+		<br><br>
+		<center>
+			<div style='width:500px;'>
+				<table class='table table-bordered'>
+					<tr>
+						<td>车名:</td>
+						<td id="car_name"></td>
+					</tr>
+					<tr>
+						<td>车价:</td>
+						<td id="price"></td>
+					</tr>
+					<tr>
+						<td>城市:</td>
+						<td id="city"></td>
+					</tr>
+					<tr>
+						<td>里程:</td>
+						<td id="distance"></td>
+					</tr>
+					<tr>
+						<td>档数:</td>
+						<td id="degree"></td>
+					</tr>
+					<tr>
+						<td>排量:</td>
+						<td id="out_put"></td>
+					</tr>
+					<tr>
+						<td>商家</td>
+						<td id="owner"></td>
+					</tr>
+				</table>
+			</div>
+			<a href="gogo?type=back_to_self&name=<%=request.getParameter("name")%>">
+			<button class="btn btn-primary">返回</button>
+			</a>
+			
+	</center> 
+
+	<script>init();get_info();</script>
+</body>
+</html>

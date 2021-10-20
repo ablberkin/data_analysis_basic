@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>数据分析案例爬虫部分</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    $("#show_button1").click(function(){
+        $("#show1").toggle();
+    });
+});
+
+
+</script>
+<style>
+* {
+    box-sizing: border-box;
+}
+
+/* body 样式 */
+body {
+    font-family: Arial;
+    margin: 0;
+}
+
+/* 标题 */
+.header {
+    padding: 80px;
+    text-align: center;
+    background: #1abc9c;
+    color: white;
+}
+
+/* 标题字体加大 */
+.header h1 {
+    font-size: 40px;
+}
+
+/* 导航 */
+.navbar {
+    overflow: hidden;
+    background-color: #333;
+}
+
+/* 导航栏样式 */
+.navbar a {
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 20px;
+    text-decoration: none;
+}
+
+/* 右侧链接*/
+.navbar a.right {
+    float: right;
+}
+
+/* 鼠标移动到链接的颜色 */
+.navbar a:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+/* 列容器 */
+.row {  
+    display: -ms-flexbox; /* IE10 */
+    display: flex;
+    -ms-flex-wrap: wrap; /* IE10 */
+    flex-wrap: wrap;
+}
+
+/* 创建两个列 */
+/* 边栏 */
+.side {
+    -ms-flex: 30%; /* IE10 */
+    flex: 30%;
+    background-color: #f1f1f1;
+    padding: 20px;
+}
+
+
+
+/* 源代码区域布局 */
+.scode{
+    /* background-color: rgb(217, 231, 84);
+    width: 100%;
+    padding: 20px;
+    color: blue; */
+    overflow: auto;
+	border:2px solid #cce0d2;
+	padding:10px 40px; 
+	background-color:#6fbb68;
+	width: 800px;
+	border-radius:25px;
+    box-shadow: 10px 10px 5px #888888;
+}
+
+/* 主要的内容区域 */
+.main {   
+    -ms-flex: 70%; /* IE10 */
+    flex: 70%;
+    background-color: white;
+    padding: 20px;
+}
+
+/* 测试图片 */
+.fakeimg {
+    background-color: #aaa;
+    width: 100%;
+    padding: 20px;
+}
+
+/* 评论区布局 */
+.comment_area{
+    padding: 40px;
+    flex: 70%
+}
+.comment{
+    width: 1150px;
+    height: 300px;
+    overflow:scroll;
+    word-wrap: normal;
+}
+
+/* 底部 */
+.footer {
+    padding: 20px;
+    text-align: center;
+    background: #ddd;
+}
+
+/* 响应式布局 - 在屏幕设备宽度尺寸小于 700px 时, 让两栏上下堆叠显示 */
+@media screen and (max-width: 700px) {
+    .row {   
+        flex-direction: column;
+    }
+}
+
+/* 响应式布局 - 在屏幕设备宽度尺寸小于 400px 时, 让导航栏目上下堆叠显示 */
+@media screen and (max-width: 400px) {
+    .navbar a {
+        float: none;
+        width: 100%;
+    }
+
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>数据分析案例教程</h1>
+  <p>————以京东电脑数据分析与推荐为例</p>
+</div>
+
+<div class="navbar">
+    <a href="首页说明.html">说明</a>
+    <a href="爬虫讲解.html">数据爬取</a>
+    <a href="数据处理与分析.html">数据处理与分析</a>
+    <a href="数据建模.html">数据建模</a>
+    <a href="index.html">评论区</a>
+
+
+  <!-- <a href="#" class="right">链接</a> -->
+</div>
+
+<div class="row">
+  <div class="side">
+    <h2>关于作者</h2>
+    <h5>陆炜</h5>
+    <img src="img/w4/2.webp" alt="" width="50%">
+      <h3>相关书籍推荐</h3>
+      <p>Python3网络爬虫开发实战 崔庆才</p>
+      <img src="img/w2/1.webp" alt="" width="50%">
+  </div>
+  <div class="main">
+      <h2>引言</h2>
+      <p>爬虫是我们获取数据的一大来源，现实中现成的数据集是很难找的，而爬虫是我们去获取特定数据集的一大利器,
+          因此了解爬虫就是我们数据分析中关键的一环
+      </p>
+      <h2>库的引用</h2>
+      <p>import BS库,requests库，re库用于爬虫，其他库用于数据处理和文件处理</p> <a href="https://beautifulsoup.readthedocs.io/zh_CN/v4.4.0/">BS库官方文档</a>
+      <pre class="scode">
+        from bs4 import BeautifulSoup as BS
+        import requests
+        import csv
+        import re
+        import pandas as pd
+        from pandas import DataFrame
+      </pre>
+      <h2>定义函数</h2>
+      <h4>翻页和获取信息</h4>
+      <p>1、res = requests.get(url,params=params,headers=headers)</p>
+        <ul>
+           <li>url为基准的url地址，不包含查询参数</li>
+            <li> 该方法会自动对params字典编码,然后和url拼接</li>
+        </ul>
+       <p>2、r.apparent_encoding</p>
+       <ul><li>从内容中自动分析出的响应编码方式</li></ul>
+      <pre class="scode">
+        def turnp(i):    #翻页代码
+        if i == 0:
+            url='https://search.jd.com/Search?keyword=%E7%AC%94%E8%AE%B0%E6%9C%AC%E7%94%B5%E8%84%91%E8%87%AA%E8%90%A5&psort=3&spm=2.1.0&psort=3&click=0%27'
+        else:
+            url='https://search.jd.com/Search?keyword=%E7%AC%94%E8%AE%B0%E6%9C%AC%E7%94%B5%E8%84%91%E8%87%AA%E8%90%A5&psort=3&spm=2.1.0&psort=3&pvid=ce328885a0b24d17852a8d13f6497e27&page='+str(i+1)+'&s='+str(30*i+1)+'&click=0'
+        return url
+    
+        def gettext(url):  #爬取文本
+            try:
+                head={"User-Agent":"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36"}
+                r=requests.get(url,headers=head)
+                r.raise_for_status()
+                r.encoding=r.apparent_encoding
+                text=r.text        
+                return text
+            except:
+                return '爬取失败'
+        
+        
+      </pre>
+      <h4>得到价格和url</h4>
+      <p>1、findall(pattern, string)</p>
+      <ul><li>返回string中所有与pattern匹配的全部字符串,返回形式为数组</li></ul>
+      <pre class="scode">
+        def get_price_html(text): #爬取每一页上的价格和url地址,返回列表
+        L_price=[]
+        L_url=[]
+        soup=BS(text,'html.parser')
+        price_all=soup.findAll('i')
+        url_all=re.findall(r'//item.jd.com/[0-9]+.html',text)
+        L=[]
+        for price in price_all:
+            try:
+                f=float(price.string)
+                if f>1000:
+                    L_price.append(f)
+            except:
+                    continue
+        for  x_url in url_all:
+            if x_url not in L_url:
+                L_url.append(x_url)
+        #print(len(L_price),len(L_url))
+        for i in range(len(L_price)):
+            L.append([L_price[i],L_url[i]])
+        return L
+      </pre>
+      <p>用上述函数获得每一网页上的信息，并将其保存为“网址.csv”文件</p>
+      <p><a href="http://blog.timd.cn/python-gettext/">GETTEXT函数文档</a></p>
+      <pre class="scode">
+        L=[]
+        for t in range(10): #遍历10页    
+            url=turnp(t)    
+            text=gettext(url)
+            L1=get_price_html(text)
+            L.extend(L1)
+        len(L)
+
+        with open('网址.csv','w') as f1: #爬取10页网址与价格，保存为csv文件
+        f=csv.writer(f1)
+        for i in L:
+            f.writerow(i)
+        print('over')
+      </pre>
+      <p>定义getinfo函数，得到每个url对应商品的信息    </p>
+      <p>1、re.search(pattern, string, flags=0)</p>
+      <ol>
+          <li>pattern : 正则中的模式字符串</li>
+          <li>string : 要被查找替换的原始字符串</li>
+          <li>flags : 标志位，用于控制正则表达式的匹配方式，如：是否区分大小写，多行匹配等等</li>
+      </ol>
+      <pre class="scode">
+        def getinfo(text): #得到每个url的详细信息
+        soup=BS(text,'html.parser')
+        m=soup.findAll('li')
+        L=[]
+        try:
+            name=re.search('商品名称：.+?<',str(m))
+            L.append(name.group()[5:-1])
+        except:
+            L.append('none')
+        try:   
+            wei=re.search('裸机重量：.+?<',str(m))
+            L.append(wei.group()[5:-1])
+        except:
+            L.append('none')
+        try:
+            thi=re.search('厚度：.+?<',str(m))
+            L.append(thi.group()[3:-1])
+        except:
+            L.append('none')
+        try:
+            big=re.search('屏幕尺寸：.+?<',str(m))
+            L.append(big.group()[5:-1])
+        except:
+            L.append('none')
+        try:
+            time=re.search('待机时长：.+?<',str(m))
+            L.append(time.group()[5:-1])
+        except:
+            L.append('none')
+        try:
+            color=re.search('屏幕色域：.+?<',str(m))
+            L.append(color.group()[5:-1])
+        except:
+            L.append('none')
+        try:
+            sys=re.search('系统：.+?<',str(m))
+            L.append(sys.group()[3:-1])
+        except:
+            L.append('none')
+        try:
+            chuliqi=re.search('处理器：.+?<',str(m))
+            L.append(chuliqi.group()[4:-1])
+        except:
+            L.append('none')
+        try:
+            try:
+                neicun=re.search('内存容量：[0-9]+?GB<',str(m))
+                L.append(neicun.group()[5:-1])
+            except:
+                neicun=re.search('内存：[0-9]+?GB<',str(m))
+                L.append(neicun.group()[3:-1])    
+        except:
+            L.append('none')
+        try:
+            yinpan=re.search('固态硬盘（SSD）：[0-9]+?GB<',str(m))
+            L.append(yinpan.group()[10:-1])    
+        except:
+            L.append('none')
+        try:
+            try:
+                xianka=re.search('显卡(型号|类别)：.+?<',str(m))
+                L.append(xianka.group()[5:-1])
+            except:
+                xianka=re.search('显卡：.+?<',str(m))
+                L.append(xianka.group()[3:-1])
+        except:
+            L.append('none')
+        return L
+      </pre>
+
+      <p>得到信息输出至“数据.csv”文件</p>
+      <pre class="scode">
+        with open('网址.csv') as f1: #将数据输出至csv
+        reader=csv.reader(f1)
+        i=0
+        with open('数据.csv','w',encoding='utf-8') as f2:
+            writer=csv.writer(f2)
+            writer.writerow(['价格','网址','商品名称','裸机重量','厚度','屏幕尺寸','待机时长','屏幕色域','系统','处理器','内存','固态硬盘','显卡'])
+            for row in reader:
+                if i%2==0:
+                    url=row[1]
+                    url='https:'+url
+                    text=gettext(url)
+                    L=getinfo(text)
+                    L=row+L
+                    writer.writerow(L)
+                i=i+1
+    
+        print('over')
+      </pre>
+  </div>
+  <!-- <div class="comment_area">
+    <form name="input" action="html_form_action.php" method="get" id="f_comment">
+        <div><h3>评论:</h3> <input type="submit" value="提交" style="float: right;" id="btn"></div>
+    </form>    
+    <br>
+    <textarea type="text" name="user" placeholder="请发表你的想法" class="comment" form="f_comment"></textarea>
+  </div>
+  <span>昵称：</span><input type="text" id="user" name="user"> -->
+  <div class="div1" id="div1">
+    <!-- 创建昵称和留言文本框 -->
+    <span>昵称：</span><input type="text" id="user" name="user">
+    <br>
+    <span>评论：</span>
+    <br>
+    <textarea class="comment" id="lang" placeholder="请发表你的想法"></textarea><br>
+    <!-- <textarea type="text" name="user" placeholder="请发表你的想法" class="comment" form="f_comment"></textarea> -->
+    <!-- 创建提交评价按钮 -->
+    <input type="button" value="提交评价" id="btn">
+</div>
+</div>
+</body>
+<script type="text/javascript">
+    //通过id属性查找标签节点
+    var user=document.getElementById('user');
+    var lang=document.getElementById('lang');
+    //通过id属性查找提交评价按钮并绑定点击事件
+    document.getElementById('btn').onclick=function(){
+        //在html代码中创建一个div盒子
+        var cont=document.createElement('div');
+        //将获取到的数据，放到一创建好的盒子中
+        cont.innerHTML='<p>'+user.value+':'+lang.value+'</p><hr>';
+        //将创建好的div盒子及及内容显示在页面中
+        document.getElementById('div1').appendChild(cont);
+        user.value='';
+        lang.value='';
+    }
+</script>
+</html>
